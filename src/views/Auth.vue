@@ -4,6 +4,19 @@
       <div class="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
         Войдите в ваш аккаунт
       </div>
+      <div v-if="errorStates.email.error" class="relative mb-6">
+        <div class="bg-yellow-200 text-yellow-900 p-4" role="alert">
+          <p>
+            Вы ввели неверный пароль или пользователя с таким email не существует
+          </p>
+          <button @click="errorStates.email.error = false" class="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="h-6 w-6 text-black" viewBox="0 0 1792 1792">
+              <path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
       <div class="flex gap-4 item-center">
         <button type="button" class="py-2 px-4 flex justify-center items-center  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
           <svg width="20" height="20" fill="currentColor" class="mr-2" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
@@ -22,16 +35,6 @@
       </div>
       <div class="mt-8">
         <form action="#" autoComplete="off">
-          <div>
-            <div class="bg-yellow-200 border-yellow-600 text-yellow-600 border-l-4 p-4" role="alert">
-              <p class="font-bold">
-                Danger
-              </p>
-              <p>
-                Battery is low, your phone can&#x27;t take a photo
-              </p>
-            </div>
-          </div>
           <div class="flex flex-col mb-2">
             <div class="flex relative ">
               <span class="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
@@ -40,7 +43,14 @@
                   </path>
                 </svg>
               </span>
-              <input type="email" v-model="authData.email" id="sign-in-email" class=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Ваш email"/>
+              <input 
+                type="email" 
+                v-model="authData.email" 
+                id="sign-in-email" 
+                class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" 
+                placeholder="Ваш email"
+                @input="errorStates.email.error = false"
+              />
             </div>
           </div>
           <div class="flex flex-col mb-6">
@@ -51,7 +61,14 @@
                   </path>
                 </svg>
               </span>
-              <input type="password" v-model="authData.password" id="sign-in-email" class=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Ваш пароль"/>
+              <input 
+                type="password" 
+                v-model="authData.password" 
+                id="sign-in-email" 
+                class="rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" 
+                placeholder="Ваш пароль"
+                @input="errorStates.email.error = false"
+              />
             </div>
           </div>
           <div class="flex items-center mb-6 -mt-4">
@@ -104,8 +121,8 @@ export default {
      //Methods
 
     const signIn = async () => {
-      let signEmail = authData.email
-      let signPass = authData.password
+      let email = authData.email
+      let password = authData.password
 
       if (!email || !password) {
         errorStates.email.error = true
