@@ -97,9 +97,10 @@
       </div>
       <div class="flex items-center justify-center mt-6">
         <a href="#" target="_blank" class="inline-flex items-center text-sm font-light text-center text-gray-500 hover:text-gray-700 dark:text-gray-100 dark:hover:text-white">
-          <span class="ml-2">
+          <!-- <span class="ml-2">
             Нет учётной записи?
-          </span>
+          </span> -->
+          <button type="button" class="ml-2" @click.prevent="goToReg">Нет учётной записи?</button>
         </a>
       </div>
     </div>
@@ -177,6 +178,10 @@ export default {
       }
     }
 
+    const goToReg = () => {
+      router.push('/reg')
+    }
+
     const fetchUserProfile = user => {
 
 
@@ -188,7 +193,8 @@ export default {
       errorStates,
       signInGithub,
       signInGoogle,
-      signIn
+      signIn,
+      goToReg
     }
   }
 }

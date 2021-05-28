@@ -3,6 +3,7 @@ import { auth } from '@/firebase'
 
 import Home from '@/views/Home.vue'
 import Auth from '@/views/Auth.vue'
+import Reg from '@/views/Reg.vue'
 import NotFound from '@/views/NotFound.vue'
 
 export const routes = [
@@ -18,6 +19,11 @@ export const routes = [
     path: '/auth', 
     component: Auth, 
     name: 'Auth' 
+  },
+  {
+    path: '/reg',
+    component: Reg,
+    name: 'Reg'
   },
   { path: '/:path(.*)', component: NotFound },
 ]
