@@ -15,7 +15,13 @@
                       </path>
                     </svg>
                   </span>
-                  <input type="text" id="design-login-email" class=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Email"/>
+                  <input 
+                    type="email" 
+                    v-model="authData.email"
+                    id="design-login-email" 
+                    class=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" 
+                    placeholder="Email"
+                  />
                 </div>
               </div>
               <div class="flex flex-col pt-4 mb-12">
@@ -26,10 +32,16 @@
                       </path>
                     </svg>
                   </span>
-                  <input type="password" id="design-login-password" class=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Password"/>
+                  <input 
+                    type="password" 
+                    v-model="authData.password"
+                    id="design-login-password" 
+                    class=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" 
+                    placeholder="Password"
+                  />
                 </div>
               </div>
-              <button type="submit" class="w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2">
+              <button @click="signUp" type="button" class="w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2">
                 <span class="w-full">
                   Submit
                 </span>
@@ -45,8 +57,59 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import firebase from 'firebase'
+import { auth } from '@/firebase'
 export default {
+  setup() {
 
+    const router = useRouter()
+
+    //Data
+    const authData = reactive( { email: '', password: '' })
+    const errorStates = reactive( {
+      email: {
+        error: false,
+        errorMsg: ''
+      },
+      password: {
+        error: false,
+        errorMsg: ''
+      }
+    })
+
+    //Methods
+
+    const signUp = async () => {
+      let email = authData.email
+      let password = authData.password
+
+      if (!email || !password) {
+        errorStates.email.error = true
+        errorStates.email.errorMsg = 'Поля email и пароль обязательны для заполнения'
+      } else {
+        const { user } = await auth.createUserWithEmailAndPassword(email, password)
+          .catch(e => {
+            errorStates.email.error = true
+            errorStates.email.emailMsg = e.message
+          })
+        if (!errorStates.email.error) fetchUserProfile(user)
+      }
+    }
+
+    const fetchUserProfile = user => {
+
+
+      router.push('/auth')
+    }
+
+    return {
+      authData,
+      errorStates,
+      signUp
+    }
+  }
 }
 </script>
 
