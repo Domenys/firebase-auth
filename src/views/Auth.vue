@@ -4,6 +4,7 @@
       <div class="self-center mb-6 text-xl font-light text-gray-600 sm:text-2xl dark:text-white">
         Войдите в ваш аккаунт
       </div>
+      <!-- <span v-if="authUser && authUser.length > 0"> {{ authUser }} </span> -->
       <div v-if="errorStates.email.error" class="relative mb-6">
         <div class="bg-yellow-200 text-yellow-900 p-4" role="alert">
           <p>
@@ -110,14 +111,16 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import firebase from 'firebase'
 import { auth } from '@/firebase'
 export default {
   setup() {
 
     const router = useRouter()
+    const store = useStore()
 
     //Data
 
@@ -132,6 +135,7 @@ export default {
         errorMsg: ''
       }
      } )
+     let authUser = ref(null)
 
      //Methods
 
@@ -174,7 +178,13 @@ export default {
             errorStates.email.error = true
             errorStates.email.errorMsg = e.message
           })
-        if (!errorStates.email.error) fetchUserProfile(user)
+        if (!errorStates.email.error)  {
+          auth.onAuthStateChanged(user => { 
+            authUser = user
+            saveAuthUser()
+           })
+          fetchUserProfile(user)
+        }
       }
     }
 
@@ -182,18 +192,25 @@ export default {
       router.push('/reg')
     }
 
+    const saveAuthUser = () => {
+      store.dispatch('saveAuthUser', authUser)
+    }
+
     const fetchUserProfile = user => {
 
 
       router.push('/')
     }
+    
 
     return {
       authData,
       errorStates,
+      authUser,
       signInGithub,
       signInGoogle,
       signIn,
+      saveAuthUser,
       goToReg
     }
   }
