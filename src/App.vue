@@ -1,12 +1,18 @@
 <template>
   <div>
-    <header class="bg-white shadow" v-if="$route.name">
-      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold leading-tight text-center text-gray-900">{{ $route.name }}</h1>
-      </div>
-    </header>
+    <Header />
     <main>
       <router-view/>
     </main>
   </div>
 </template>
+
+<script>
+import Header from '@/components/Header.vue'
+export default {
+  name: 'App',
+  components: {
+    Header
+  }
+}
+</script>

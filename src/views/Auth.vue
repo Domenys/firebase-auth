@@ -145,6 +145,7 @@ export default {
       firebase.auth().signInWithPopup(provider)
         .then(result => {
           fetchUserProfile(result.user)
+          saveAuthUser()
         })
         .catch(error => {
           errorStates.email.error = true
@@ -158,6 +159,7 @@ export default {
       await firebase.auth().signInWithPopup(provider)
         .then(result => {
           fetchUserProfile(result.user)
+          saveAuthUser()
         })
         .catch(error => {
           errorStates.email.error = true
@@ -179,10 +181,7 @@ export default {
             errorStates.email.errorMsg = e.message
           })
         if (!errorStates.email.error)  {
-          auth.onAuthStateChanged(user => { 
-            authUser = user
-            saveAuthUser()
-           })
+          saveAuthUser()
           fetchUserProfile(user)
         }
       }
@@ -193,7 +192,7 @@ export default {
     }
 
     const saveAuthUser = () => {
-      store.dispatch('saveAuthUser', authUser)
+      auth.onAuthStateChanged(user => store.dispatch('saveAuthUser', user))
     }
 
     const fetchUserProfile = user => {

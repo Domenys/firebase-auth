@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '@/firebase'
 
+import store from '@/store'
+
 import Home from '@/views/Home.vue'
 import Auth from '@/views/Auth.vue'
 import Reg from '@/views/Reg.vue'
@@ -36,7 +38,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
-
+  console.log('store')
+  console.log(store.state.authUser)
   if (requiresAuth && !auth.currentUser) {
     next('/auth')
   } else {
